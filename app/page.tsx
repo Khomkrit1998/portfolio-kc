@@ -2,7 +2,6 @@ import { Suspense } from "react"
 import Hero from "./components/Hero"
 import ProjectsSection from "./components/ProjectsSection"
 import TeamSection from "./components/TeamSection"
-import BlogSection from "./components/BlogSection"
 import Footer from "./components/Footer"
 
 export default function Home() {
@@ -19,15 +18,6 @@ export default function Home() {
         <ProjectsSection />
       </Suspense>
       <TeamSection />
-      <Suspense
-        fallback={
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          </div>
-        }
-      >
-        <BlogSection />
-      </Suspense>
       <Footer />
     </main>
   )
