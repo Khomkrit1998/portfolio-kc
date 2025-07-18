@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import Hero from "./components/Hero"
 import ProjectsSection from "./components/ProjectsSection"
+import TeamSection from "./components/TeamSection"
 import Footer from "./components/Footer"
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       >
         <ProjectsSection />
       </Suspense>
+      <TeamSection />
       <Footer />
     </main>
   )
