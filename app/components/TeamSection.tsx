@@ -3,13 +3,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { getTeamByCategory, type TeamMember } from "../lib/team"
+import { getAllTeamMembers, type TeamMember } from "../lib/team"
 
 interface TeamMemberCardProps {
   member: TeamMember
 }
 
 function TeamMemberCard({ member }: TeamMemberCardProps) {
+  const categoryColors = {
+    Frontend: "bg-blue-100 text-blue-800",
+    Backend: "bg-green-100 text-green-800",
+    Marketing: "bg-orange-100 text-orange-800",
+  }
+
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white">
       <CardHeader className="text-center">
@@ -27,6 +33,9 @@ function TeamMemberCard({ member }: TeamMemberCardProps) {
         </div>
         <CardTitle className="text-lg font-bold text-gray-900">{member.name}</CardTitle>
         <CardDescription className="text-sm font-medium text-gray-600">{member.role}</CardDescription>
+        <Badge variant="secondary" className={`text-xs ${categoryColors[member.category]} mt-2`}>
+          {member.category}
+        </Badge>
       </CardHeader>
 
       <CardContent className="space-y-4">
@@ -87,46 +96,8 @@ function TeamMemberCard({ member }: TeamMemberCardProps) {
   )
 }
 
-interface TeamCategoryProps {
-  category: TeamMember["category"]
-  members: TeamMember[]
-}
-
-function TeamCategory({ category, members }: TeamCategoryProps) {
-  const categoryColors = {
-    Frontend: "from-blue-500 to-purple-500",
-    Backend: "from-green-500 to-teal-500",
-    Marketing: "from-orange-500 to-red-500",
-  }
-
-  const categoryDescriptions = {
-    Frontend: "Creating beautiful and intuitive user experiences",
-    Backend: "Building robust and scalable server-side solutions",
-    Marketing: "Driving growth through strategic marketing initiatives",
-  }
-
-  return (
-    <div className="mb-16">
-      <div className="text-center mb-8">
-        <div className={`inline-block bg-gradient-to-r ${categoryColors[category]} bg-clip-text text-transparent`}>
-          <h3 className="text-2xl font-bold mb-2">{category} Team</h3>
-        </div>
-        <p className="text-gray-600 max-w-md mx-auto">{categoryDescriptions[category]}</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {members.map((member) => (
-          <TeamMemberCard key={member.id} member={member} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export default function TeamSection() {
-  const frontendTeam = getTeamByCategory("Frontend")
-  const backendTeam = getTeamByCategory("Backend")
-  const marketingTeam = getTeamByCategory("Marketing")
+  const allMembers = getAllTeamMembers()
 
   return (
     <section id="team" className="py-20 bg-white">
@@ -138,9 +109,11 @@ export default function TeamSection() {
           </p>
         </div>
 
-        <TeamCategory category="Frontend" members={frontendTeam} />
-        <TeamCategory category="Backend" members={backendTeam} />
-        <TeamCategory category="Marketing" members={marketingTeam} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {allMembers.map((member) => (
+            <TeamMemberCard key={member.id} member={member} />
+          ))}
+        </div>
       </div>
     </section>
   )
