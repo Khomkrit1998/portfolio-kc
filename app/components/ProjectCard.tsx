@@ -1,9 +1,12 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useLanguage } from "../contexts/LanguageContext"
 import type { Project } from "../lib/types"
 
 interface ProjectCardProps {
@@ -11,6 +14,8 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const { t } = useLanguage()
+
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white dark:bg-gray-800">
       <div className="relative overflow-hidden rounded-t-lg">
@@ -55,7 +60,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           >
             <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4 mr-2" />
-              Live Demo
+              {t("projects.liveDemo")}
             </Link>
           </Button>
         )}
@@ -67,7 +72,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           >
             <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
               <Github className="w-4 h-4 mr-2" />
-              Code
+              {t("projects.code")}
             </Link>
           </Button>
         )}

@@ -1,8 +1,11 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useLanguage } from "../contexts/LanguageContext"
 import { getAllTeamMembers, type TeamMember } from "../lib/team"
 
 interface TeamMemberCardProps {
@@ -10,11 +13,22 @@ interface TeamMemberCardProps {
 }
 
 function TeamMemberCard({ member }: TeamMemberCardProps) {
+  const { t } = useLanguage()
+
   const categoryColors = {
     Frontend: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
     Backend: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     Marketing: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
   }
+
+  // Get translated member info
+  const memberKey = member.name.toLowerCase().split(" ")[0]
+  const translatedName =
+    t(`team.${memberKey}.name`) !== `team.${memberKey}.name` ? t(`team.${memberKey}.name`) : member.name
+  const translatedRole =
+    t(`team.${memberKey}.role`) !== `team.${memberKey}.role` ? t(`team.${memberKey}.role`) : member.role
+  const translatedBio = t(`team.${memberKey}.bio`) !== `team.${memberKey}.bio` ? t(`team.${memberKey}.bio`) : member.bio
+  const translatedCategory = t(`category.${member.category.toLowerCase()}`)
 
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white dark:bg-gray-800">
@@ -24,24 +38,24 @@ function TeamMemberCard({ member }: TeamMemberCardProps) {
           <div className="relative">
             <Image
               src={member.image || "/placeholder.svg"}
-              alt={member.name}
+              alt={translatedName}
               width={80}
               height={80}
               className="rounded-full border-4 border-white dark:border-gray-700 shadow-lg transform transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </div>
-        <CardTitle className="text-lg font-bold text-gray-900 dark:text-white">{member.name}</CardTitle>
+        <CardTitle className="text-lg font-bold text-gray-900 dark:text-white">{translatedName}</CardTitle>
         <CardDescription className="text-sm font-medium text-gray-600 dark:text-gray-300">
-          {member.role}
+          {translatedRole}
         </CardDescription>
         <Badge variant="secondary" className={`text-xs ${categoryColors[member.category]} mt-2`}>
-          {member.category}
+          {translatedCategory}
         </Badge>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <p className="text-sm text-gray-600 dark:text-gray-300 text-center leading-relaxed">{member.bio}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 text-center leading-relaxed">{translatedBio}</p>
 
         <div className="flex flex-wrap gap-1 justify-center">
           {member.skills.slice(0, 4).map((skill) => (
@@ -109,16 +123,15 @@ function TeamMemberCard({ member }: TeamMemberCardProps) {
 }
 
 export default function TeamSection() {
+  const { t } = useLanguage()
   const allMembers = getAllTeamMembers()
 
   return (
     <section id="team" className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Meet Our Team</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Talented professionals working together to deliver exceptional results
-          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">{t("team.title")}</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">{t("team.subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">

@@ -11,12 +11,15 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { authenticate, setCurrentUser } from "../lib/auth"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Lock, Mail } from "lucide-react"
+import { useLanguage } from "../contexts/LanguageContext"
+import { LanguageToggle } from "./LanguageToggle"
 
 interface LoginFormProps {
   onSuccess?: () => void
 }
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
+  const { t } = useLanguage()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -36,26 +39,30 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         onSuccess?.()
         router.push("/admin")
       } else {
-        setError("Invalid email or password")
+        setError(t("admin.invalidCredentials"))
       }
     } catch (err) {
-      setError("An error occurred during login")
+      setError(t("admin.loginError"))
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+      <div className="absolute top-6 right-6">
+        <LanguageToggle />
+      </div>
+
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>Access the project management dashboard</CardDescription>
+          <CardTitle className="text-2xl font-bold">{t("admin.login")}</CardTitle>
+          <CardDescription>{t("admin.loginDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("admin.email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
@@ -71,7 +78,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("admin.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
@@ -100,14 +107,14 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             )}
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? t("admin.signingIn") : t("admin.signIn")}
             </Button>
           </form>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-2">Demo Credentials:</p>
-            <p className="text-xs text-gray-500">Email: admin@portfolio.com</p>
-            <p className="text-xs text-gray-500">Password: admin123</p>
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{t("admin.demoCredentials")}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Email: admin@portfolio.com</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Password: admin123</p>
           </div>
         </CardContent>
       </Card>

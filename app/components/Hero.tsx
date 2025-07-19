@@ -5,12 +5,17 @@ import { ArrowDown, Github, Linkedin, Mail } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { ThemeToggle } from "./ThemeToggle"
+import { LanguageToggle } from "./LanguageToggle"
+import { useLanguage } from "../contexts/LanguageContext"
 
 export default function Hero() {
+  const { t } = useLanguage()
+
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black dark:from-gray-950 dark:via-gray-900 dark:to-black text-white">
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 z-20">
+      {/* Theme and Language Toggles */}
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
+        <LanguageToggle />
         <ThemeToggle />
       </div>
 
@@ -66,10 +71,10 @@ export default function Hero() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 dark:from-white dark:to-gray-200 bg-clip-text text-transparent animate-fade-in">
-            John Developer
+            {t("hero.title")}
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 dark:text-gray-200 mb-8 leading-relaxed animate-fade-in-delay">
-            Full-Stack Developer crafting exceptional web experiences with modern technologies
+            {t("hero.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-fade-in-delay-2">
             <Button
@@ -77,7 +82,7 @@ export default function Hero() {
               size="lg"
               className="bg-white text-black hover:bg-gray-200 dark:bg-gray-100 dark:text-black dark:hover:bg-white transform transition-all duration-200 hover:scale-105 hover:shadow-xl"
             >
-              <Link href="#projects">View My Work</Link>
+              <Link href="#projects">{t("hero.viewWork")}</Link>
             </Button>
             <Button
               asChild
@@ -85,7 +90,7 @@ export default function Hero() {
               size="lg"
               className="border-white text-white hover:bg-white hover:text-black dark:border-gray-200 dark:text-gray-200 dark:hover:bg-gray-200 dark:hover:text-black bg-transparent transform transition-all duration-200 hover:scale-105 hover:shadow-xl"
             >
-              <Link href="/admin">Manage Projects</Link>
+              <Link href="/admin">{t("hero.manageProjects")}</Link>
             </Button>
           </div>
           <div className="flex justify-center space-x-6 animate-fade-in-delay-3">
